@@ -1,0 +1,27 @@
+package layout
+
+templ Base(isLoggedIn bool, name string) {
+	<!DOCTYPE html>
+	<html lang="en" data-theme="dark">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Seats Organizer</title>
+
+        <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+    </head>
+    <body hx-boost="true">
+
+		<form id="form"
+		      hx-encoding="multipart/form-data"
+		      hx-post="/organize"
+		      hx-target="#result"
+        >
+            <input type="file" name="file" />
+            <button type="submit">Submit</button>
+        </form>
+
+        <div id="result"></div>
+    </body>
+	</html>
+}

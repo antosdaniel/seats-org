@@ -1,15 +1,19 @@
 package main
 
 import (
+	"encoding/csv"
 	"fmt"
 
-	layout "github.com/antosdaniel/seats-org/views"
+	"github.com/antosdaniel/seats-org/views/layout"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
 	e := echo.New()
+
+	e.Use(middleware.Logger())
 
 	e.Static("/", "assets")
 
@@ -20,10 +24,26 @@ func main() {
 			Render(c.Request().Context(), c.Response())
 	})
 
-	e.GET("/search", func(c echo.Context) error {
+	e.POST("/organize", func(c echo.Context) error {
 		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTML)
 
-		_, _ = c.Response().Write([]byte(fmt.Sprintf("%s", c.QueryParam("name"))))
+		file, err := c.FormFile("file")
+		if err != nil {
+			return fmt.Errorf("file not provided: %w", err)
+		}
+
+		src, err := file.Open()
+		if err != nil {
+			return fmt.Errorf("could not open file: %w", err)
+		}
+		defer src.Close()
+
+		records, err := csv.NewReader(src).ReadAll()
+		if err != nil {
+			return fmt.Errorf("could not read CSV: %w", err)
+		}
+
+		_, _ = c.Response().Write([]byte(fmt.Sprintf("%v", records)))
 		return nil
 	})
 
