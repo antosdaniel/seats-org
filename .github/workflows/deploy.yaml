@@ -1,0 +1,67 @@
+name: Check generated files
+
+on: [push]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  gen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.22'
+      - name: Install tools
+        run: make install
+      - name: Generate code
+        run: |
+          # Regenerate code
+          make generate
+      - name: Fail if there are changed files
+        run: |
+          CHANGED_FILES=$(git diff --name-only)
+          if [ -n "${CHANGED_FILES}" ]; then
+            echo "Your generated files are off. Don't forget to run 'make generate'. Files with changes:"
+            echo "${CHANGED_FILES}"
+            exit 1
+          fi
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.22'
+      - name: Run tests
+        run: go test ./...
+
+  build-and-publish:
+    runs-on: ubuntu-latest
+    needs:
+      - gen
+      - test
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./build/Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest

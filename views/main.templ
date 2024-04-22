@@ -1,0 +1,21 @@
+package layout
+
+templ Base(isLoggedIn bool, name string) {
+	<!DOCTYPE html>
+	<html lang="en" data-theme="dark">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+		</head>
+		<body hx-boost="true">
+		    <h1>{ name }</h1>
+		    <input type="search" name="name"
+		        hx-get="/search"
+		        hx-trigger="keyup changed delay:500ms"
+		        hx-target="#search-results"
+		        placeholder="New name..." />
+            <div id="search-results"></div>
+		</body>
+	</html>
+}
