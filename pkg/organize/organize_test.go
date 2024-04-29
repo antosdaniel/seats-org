@@ -70,55 +70,64 @@ func TestOrganize(t *testing.T) {
 			name:       "passengers prefer window seats",
 			layout:     exampleLayout,
 			passengers: organize.Passengers{},
-			//want:       organize.Organized{},
+
+			want: []seatedPassenger{},
 		},
 		{
 			name:       "passengers prefer aisle seats",
 			layout:     exampleLayout,
 			passengers: organize.Passengers{},
-			//want:       organize.Organized{},
+
+			want: []seatedPassenger{},
 		},
 		{
 			name:       "passengers prefer front window seats",
 			layout:     exampleLayout,
 			passengers: organize.Passengers{},
-			//want:       organize.Organized{},
+
+			want: []seatedPassenger{},
 		},
 		{
 			name:       "passengers prefer front aisle seats",
 			layout:     exampleLayout,
 			passengers: organize.Passengers{},
-			//want:       organize.Organized{},
+
+			want: []seatedPassenger{},
 		},
 		{
 			name:       "passengers prefer rear window seats",
 			layout:     exampleLayout,
 			passengers: organize.Passengers{},
-			//want:       organize.Organized{},
+
+			want: []seatedPassenger{},
 		},
 		{
 			name:       "passengers prefer rear aisle seats",
 			layout:     exampleLayout,
 			passengers: organize.Passengers{},
-			//want:       organize.Organized{},
+
+			want: []seatedPassenger{},
 		},
 		{
 			name:       "group sits together",
 			layout:     exampleLayout,
 			passengers: organize.Passengers{},
-			//want:       organize.Organized{},
+
+			want: []seatedPassenger{},
 		},
 		{
 			name:       "solo travelers sit alone",
 			layout:     exampleLayout,
 			passengers: organize.Passengers{},
-			//want:       organize.Organized{},
+
+			want: []seatedPassenger{},
 		},
 		{
 			name:       "solo travelers of the same gender sit together, if there are no available seats",
 			layout:     exampleLayout,
 			passengers: organize.Passengers{},
-			//want:       organize.Organized{},
+
+			want: []seatedPassenger{},
 		},
 	}
 	for _, tc := range testCases {
