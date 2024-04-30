@@ -3,8 +3,8 @@ package organize
 type Passengers []Passenger
 
 type Passenger struct {
-	id       PassengerId
-	fullName string
+	id          PassengerId
+	signupOrder int
 
 	travelsWith []PassengerId
 	preferences Preferences
@@ -21,10 +21,10 @@ func (ps Passengers) WithPreference(preference Preference) Passengers {
 	return result
 }
 
-func NewPassenger(id PassengerId, fullName string, preferences ...Preference) Passenger {
+func NewPassenger(id PassengerId, signupOrder int, preferences ...Preference) Passenger {
 	return Passenger{
 		id:          id,
-		fullName:    fullName,
+		signupOrder: signupOrder,
 		travelsWith: nil,
 		preferences: preferences,
 	}
@@ -36,8 +36,8 @@ func (p Passenger) Id() PassengerId {
 	return p.id
 }
 
-func (p Passenger) FullName() string {
-	return p.fullName
+func (p Passenger) SignupOrder() int {
+	return p.signupOrder
 }
 
 func (p Passenger) TravelsAlone() bool {

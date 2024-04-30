@@ -37,7 +37,13 @@ func Organize(layout *Layout, passengers Passengers) (Organized, error) {
 	// The more preferences passenger has, the harder it is to find a seat for them.
 	// We should start with passengers who have the most preferences.
 	slices.SortFunc(passengers, func(a, b Passenger) int {
-		return len(b.Preferences()) - len(a.Preferences())
+		pref := len(b.Preferences()) - len(a.Preferences())
+		if pref != 0 {
+			return pref
+		}
+
+		// When passengers have the same number of preferences, order them by when they signed up
+		return a.SignupOrder() - b.SignupOrder()
 	})
 
 	for _, passenger := range passengers {
@@ -68,6 +74,10 @@ func Organize(layout *Layout, passengers Passengers) (Organized, error) {
 					}
 				case WindowSeatPreference:
 					if seat.window {
+						fulfilled += maxPoints
+					}
+				case AisleSeatPreference:
+					if seat.aisle {
 						fulfilled += maxPoints
 					}
 				default:
