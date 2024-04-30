@@ -35,70 +35,6 @@ func (l *Layout) LastRow() int {
 	return l.rows - 1
 }
 
-func (l *Layout) FrontSeat() (row, col int) {
-	return 0, 0
-}
-
-func (l *Layout) NextToRight(row, col int) (r, c int, exists bool) {
-	col += 1
-
-	if l.isOutsideOfBoundaries(row, col) {
-		return 0, 0, false
-	}
-
-	if !l.IsSeat(row, col) {
-		return l.NextToRight(row, col)
-	}
-
-	return row, col, true
-}
-
-func (l *Layout) ThisOrToTheRight(row, col int) (r, c int, exists bool) {
-	if l.isOutsideOfBoundaries(row, col) {
-		return 0, 0, false
-	}
-
-	if !l.IsSeat(row, col) {
-		return l.ThisOrToTheRight(row, col+1)
-	}
-
-	return row, col, true
-}
-
-func (l *Layout) NextRow(row, col int) (r, c int, exists bool) {
-	row += 1
-
-	if row >= l.rows {
-		return 0, 0, false
-	}
-
-	if !l.IsSeat(row, col) {
-		return 0, 0, false
-	}
-
-	return row, col, true
-}
-
-func (l *Layout) NextToRightOrInNextRow(row, col int) (r, c int, exists bool) {
-	if l.isOutsideOfBoundaries(row, col) {
-		return 0, 0, false
-	}
-
-	r, c, exists = l.NextToRight(row, col)
-	if exists {
-		return
-	}
-
-	// We are checking if the first next row is an available seat, because recursive check will skip first column.
-	row += 1
-	col = 0
-	if l.IsSeat(row, col) {
-		return row, col, true
-	}
-
-	return l.NextToRightOrInNextRow(row, col)
-}
-
 func (l *Layout) isOutsideOfBoundaries(row, col int) bool {
 	if row >= l.rows {
 		// Outside of matrix
@@ -169,4 +105,8 @@ func MustImportLayout(rows, cols int, matrix [][]IsSeat) *Layout {
 		panic(err)
 	}
 	return layout
+}
+
+func OrderOf(layout *Layout, row, col int) int {
+	return (row+1)*layout.cols + col
 }
