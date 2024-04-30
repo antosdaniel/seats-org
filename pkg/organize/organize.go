@@ -47,30 +47,30 @@ func Organize(layout *Layout, passengers Passengers) (Organized, error) {
 				return fullHappiness
 			}
 
-			seat := layout.matrix[row][col]
+			//seat := layout.matrix[row][col]
+
+			const maxPoints = 10
+			possible := maxPoints * len(passenger.preferences)
 			fulfilled := 0
-			possible := 0
+
 			for _, preference := range passenger.preferences {
 				switch preference {
 				case FrontSeatPreference:
-					possible += 2
-					if seat.mostFront {
-						fulfilled += 2
-					} else if seat.front {
-						fulfilled += 1
+					result := maxPoints - row
+					if result > 0 {
+						fulfilled += result
 					}
 				case RearSeatPreference:
-					possible += 2
-					if seat.mostRear {
-						fulfilled += 2
-					} else if seat.rear {
-						fulfilled += 1
+					diff := layout.LastRow() - row
+					result := maxPoints - diff
+					if result > 0 {
+						fulfilled += result
 					}
 				default:
 					panic(fmt.Sprintf("uknown preference %q", preference))
 				}
 			}
-			return fullHappiness * happiness(fulfilled/possible)
+			return happiness(int(fullHappiness) * fulfilled / possible)
 		})
 
 		row, col, exists := hm.firstHappiestSeat()

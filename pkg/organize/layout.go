@@ -9,11 +9,6 @@ type IsSeat bool
 type Seat struct {
 	aisle  bool
 	window bool
-
-	mostFront bool
-	front     bool
-	mostRear  bool
-	rear      bool
 }
 
 type Layout struct {
@@ -30,6 +25,14 @@ func (l *Layout) IsSeat(row, col int) bool {
 		return false
 	}
 	return l.matrix[row][col] != nil
+}
+
+func (l *Layout) FirstRow() int {
+	return 0
+}
+
+func (l *Layout) LastRow() int {
+	return l.rows - 1
 }
 
 func (l *Layout) FrontSeat() (row, col int) {
@@ -152,11 +155,6 @@ func ImportLayout(rows, cols int, matrix [][]IsSeat) (*Layout, error) {
 				// The previous space is corridor
 				s.aisle = true
 			}
-
-			s.mostFront = row == 0
-			s.front = row < 4
-			s.mostRear = row == rows-1
-			s.rear = row > rows-4
 
 			layout.matrix[row][col] = s
 		}
