@@ -7,6 +7,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const (
+	x = false
+	o = true
+)
+
 func TestImportLayout(t *testing.T) {
 	testCases := []struct {
 		name string
@@ -32,9 +37,9 @@ func TestImportLayout(t *testing.T) {
 			rows: 3,
 			cols: 3,
 			matrix: [][]IsSeat{
-				{O, O, O},
-				{O, O},
-				{O, O, O},
+				{o, o, o},
+				{o, o},
+				{o, o, o},
 			},
 
 			wantErr: errors.New("provided (2) different amount of cols than promised (3) at row 1"),
@@ -45,10 +50,10 @@ func TestImportLayout(t *testing.T) {
 			rows: 4,
 			cols: 4,
 			matrix: [][]IsSeat{
-				{O, O, O, O},
-				{O, X, O, O},
-				{X, X, O, O},
-				{O, X, O, O},
+				{o, o, o, o},
+				{o, x, o, o},
+				{x, x, o, o},
+				{o, x, o, o},
 			},
 
 			want: &Layout{
