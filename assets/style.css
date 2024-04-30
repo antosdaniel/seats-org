@@ -1,0 +1,12 @@
+body {
+    width: 800px;
+    margin: 0 auto;
+}
+
+#seat-layout {
+    white-space: pre-wrap;
+}
+
+.form-line {
+    margin: 10px 0;
+}

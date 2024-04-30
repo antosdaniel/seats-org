@@ -3,7 +3,9 @@ package main
 import (
 	"encoding/csv"
 	"fmt"
+	"sort"
 
+	"github.com/antosdaniel/seats-org/pkg/seat_layouts"
 	"github.com/antosdaniel/seats-org/views/layout"
 
 	"github.com/labstack/echo/v4"
@@ -20,14 +22,25 @@ func main() {
 	e.GET("/", func(c echo.Context) error {
 		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTML)
 
-		return layout.Base(false, c.QueryParam("name")).
+		keys := []string{}
+		for name := range seat_layouts.Presets {
+			keys = append(keys, name)
+		}
+		sort.Strings(keys)
+
+		layouts := make([]layout.SeatLayout, len(seat_layouts.Presets))
+		for i, name := range keys {
+			layouts[i] = layout.NewSeatLayout(name, seat_layouts.Presets[name])
+		}
+
+		return layout.Base(layouts).
 			Render(c.Request().Context(), c.Response())
 	})
 
 	e.POST("/organize", func(c echo.Context) error {
 		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTML)
 
-		file, err := c.FormFile("file")
+		file, err := c.FormFile("passengers")
 		if err != nil {
 			return fmt.Errorf("file not provided: %w", err)
 		}
@@ -44,6 +57,21 @@ func main() {
 		}
 
 		_, _ = c.Response().Write([]byte(fmt.Sprintf("%v", records)))
+		return nil
+	})
+
+	e.GET("/preview", func(c echo.Context) error {
+		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTML)
+
+		name := c.QueryParam("layout")
+		s, isSet := seat_layouts.Presets[name]
+		if !isSet {
+			_, _ = c.Response().Write([]byte("seat layout not found"))
+			return nil
+		}
+
+		selected := layout.NewSeatLayout(name, s)
+		_, _ = c.Response().Write([]byte(selected.Visual))
 		return nil
 	})
 

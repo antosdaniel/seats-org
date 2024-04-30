@@ -1,6 +1,6 @@
 package layout
 
-templ Base(isLoggedIn bool, name string) {
+templ Base(layouts []SeatLayout) {
 	<!DOCTYPE html>
 	<html lang="en" data-theme="dark">
     <head>
@@ -8,20 +8,40 @@ templ Base(isLoggedIn bool, name string) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title>Seats Organizer</title>
 
+        <link rel="stylesheet" href="/style.css" />
+
         <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
     </head>
     <body hx-boost="true">
-
-		<form id="form"
+		<form id="organize"
 		      hx-encoding="multipart/form-data"
 		      hx-post="/organize"
-		      hx-target="#result"
+		      hx-target="#organize-result"
         >
-            <input type="file" name="file" />
-            <button type="submit">Submit</button>
+            <div class="form-line">
+                Choose seat layout:
+                <select name="layout" hx-get="/preview" hx-target="#seat-layout" hx-trigger="load, change">
+                    <option value="" selected disabled hidden></option>
+                    for _, l := range layouts {
+                        <option value={ l.Name }>{ l.Name }</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-line">
+                List of passengers:
+                <input type="file" name="passengers" />
+            </div>
+
+            <div class="form-line">
+                <button type="submit">Submit</button>
+            </div>
         </form>
 
-        <div id="result"></div>
+        Selected seat layout:
+        <div id="seat-layout"></div>
+
+        <div id="organize-result"></div>
     </body>
 	</html>
 }

@@ -17,6 +17,14 @@ type Layout struct {
 	matrix [][]*Seat
 }
 
+func (l *Layout) Rows() int {
+	return l.rows
+}
+
+func (l *Layout) Cols() int {
+	return l.cols
+}
+
 func (l *Layout) IsSeat(row, col int) bool {
 	if row >= l.rows {
 		return false
@@ -46,6 +54,18 @@ func (l *Layout) isOutsideOfBoundaries(row, col int) bool {
 	}
 
 	return false
+}
+
+func (l *Layout) SeatsMatrix() [][]IsSeat {
+	result := make([][]IsSeat, l.rows)
+	for row := range l.rows {
+		result[row] = make([]IsSeat, l.cols)
+		for col := range l.cols {
+			result[row][col] = IsSeat(l.IsSeat(row, col))
+		}
+	}
+
+	return result
 }
 
 func NewLayout(rows, cols int) *Layout {
