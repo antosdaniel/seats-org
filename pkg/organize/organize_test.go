@@ -1,6 +1,7 @@
 package organize_test
 
 import (
+	"slices"
 	"testing"
 
 	"github.com/antosdaniel/seats-org/pkg/organize"
@@ -67,20 +68,28 @@ func TestOrganize(t *testing.T) {
 				organize.NewPassenger("06", "", organize.RearSeatPreference),
 			},
 			want: []seatedPassenger{
+				{id: "06", row: 3, col: 0},
 				{id: "01", row: 4, col: 0},
 				{id: "02", row: 4, col: 1},
 				{id: "03", row: 4, col: 2},
 				{id: "04", row: 4, col: 3},
 				{id: "05", row: 4, col: 4},
-				{id: "06", row: 3, col: 0},
 			},
 		},
 		{
-			name:       "passengers prefer window seats",
-			layout:     exampleLayout,
-			passengers: organize.Passengers{},
+			name:   "passengers prefer window seats",
+			layout: exampleLayout,
+			passengers: organize.Passengers{
+				organize.NewPassenger("01", "", organize.WindowSeatPreference),
+				organize.NewPassenger("02", "", organize.WindowSeatPreference),
+				organize.NewPassenger("03", "", organize.WindowSeatPreference),
+			},
 
-			want: []seatedPassenger{},
+			want: []seatedPassenger{
+				{id: "01", row: 0, col: 0},
+				{id: "02", row: 0, col: 4},
+				{id: "03", row: 1, col: 0},
+			},
 		},
 		{
 			name:       "passengers prefer aisle seats",
@@ -90,49 +99,26 @@ func TestOrganize(t *testing.T) {
 			want: []seatedPassenger{},
 		},
 		{
-			name:       "passengers prefer front window seats",
-			layout:     exampleLayout,
-			passengers: organize.Passengers{},
+			name:   "passengers prefer front window seats",
+			layout: exampleLayout,
+			passengers: organize.Passengers{
+				organize.NewPassenger("01", "", organize.FrontSeatPreference, organize.WindowSeatPreference),
+				organize.NewPassenger("02", "", organize.FrontSeatPreference),
+				organize.NewPassenger("03", "", organize.FrontSeatPreference),
+				organize.NewPassenger("04", "", organize.FrontSeatPreference),
+				organize.NewPassenger("05", "", organize.FrontSeatPreference, organize.WindowSeatPreference),
+			},
 
-			want: []seatedPassenger{},
-		},
-		{
-			name:       "passengers prefer front aisle seats",
-			layout:     exampleLayout,
-			passengers: organize.Passengers{},
-
-			want: []seatedPassenger{},
-		},
-		{
-			name:       "passengers prefer rear window seats",
-			layout:     exampleLayout,
-			passengers: organize.Passengers{},
-
-			want: []seatedPassenger{},
+			want: []seatedPassenger{
+				{id: "01", row: 0, col: 0}, // front + window
+				{id: "02", row: 0, col: 1},
+				{id: "03", row: 0, col: 3},
+				{id: "05", row: 0, col: 4}, // front + window
+				{id: "04", row: 1, col: 0},
+			},
 		},
 		{
 			name:       "passengers prefer rear aisle seats",
-			layout:     exampleLayout,
-			passengers: organize.Passengers{},
-
-			want: []seatedPassenger{},
-		},
-		{
-			name:       "group sits together",
-			layout:     exampleLayout,
-			passengers: organize.Passengers{},
-
-			want: []seatedPassenger{},
-		},
-		{
-			name:       "solo travelers sit alone",
-			layout:     exampleLayout,
-			passengers: organize.Passengers{},
-
-			want: []seatedPassenger{},
-		},
-		{
-			name:       "solo travelers of the same gender sit together, if there are no available seats",
 			layout:     exampleLayout,
 			passengers: organize.Passengers{},
 
@@ -157,6 +143,9 @@ func TestOrganize(t *testing.T) {
 					col: i.Col(),
 				})
 			}
+			slices.SortFunc(parsed, func(a, b seatedPassenger) int {
+				return organize.OrderOf(tc.layout, a.row, a.col) - organize.OrderOf(tc.layout, b.row, b.col)
+			})
 			assert.Equal(t, tc.want, parsed)
 		})
 	}

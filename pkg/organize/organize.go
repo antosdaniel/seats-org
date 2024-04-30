@@ -47,7 +47,7 @@ func Organize(layout *Layout, passengers Passengers) (Organized, error) {
 				return fullHappiness
 			}
 
-			//seat := layout.matrix[row][col]
+			seat := layout.matrix[row][col]
 
 			const maxPoints = 10
 			possible := maxPoints * len(passenger.preferences)
@@ -65,6 +65,10 @@ func Organize(layout *Layout, passengers Passengers) (Organized, error) {
 					result := maxPoints - diff
 					if result > 0 {
 						fulfilled += result
+					}
+				case WindowSeatPreference:
+					if seat.window {
+						fulfilled += maxPoints
 					}
 				default:
 					panic(fmt.Sprintf("uknown preference %q", preference))
