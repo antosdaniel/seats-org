@@ -3,7 +3,14 @@ body {
     margin: 0 auto;
 }
 
+.organize-seats {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 #seat-layout {
+    width: 400px;
     white-space: pre-wrap;
 }
 

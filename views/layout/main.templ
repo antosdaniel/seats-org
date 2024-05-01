@@ -13,33 +13,36 @@ templ Base(layouts []SeatLayout) {
         <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
     </head>
     <body hx-boost="true">
-		<form id="organize"
-		      hx-encoding="multipart/form-data"
-		      hx-post="/organize"
-		      hx-target="#organize-result"
-        >
-            <div class="form-line">
-                Choose seat layout:
-                <select name="layout" hx-get="/preview" hx-target="#seat-layout" hx-trigger="load, change">
-                    <option value="" selected disabled hidden></option>
-                    for _, l := range layouts {
-                        <option value={ l.Name }>{ l.Name }</option>
-                    }
-                </select>
-            </div>
+        <div class="organize-seats">
+            <form id="organize"
+                  hx-encoding="multipart/form-data"
+                  hx-post="/organize"
+                  hx-target="#organize-result"
+            >
+                <div class="form-line">
+                    Choose seat layout:
+                    <select name="layout" hx-get="/preview" hx-target="#seat-layout" hx-trigger="load, change">
+                        <option value="" selected disabled hidden></option>
+                        for _, l := range layouts {
+                            <option value={ l.Name }>{ l.Name }</option>
+                        }
+                    </select>
+                </div>
 
-            <div class="form-line">
-                List of passengers:
-                <input type="file" name="passengers" />
-            </div>
+                <div class="form-line">
+                    List of passengers:
+                    <input type="file" name="passengers" />
+                </div>
 
-            <div class="form-line">
-                <button type="submit">Submit</button>
+                <div class="form-line">
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
+            <div>
+                Selected seat layout preview:
+                <div id="seat-layout"></div>
             </div>
-        </form>
-
-        Selected seat layout:
-        <div id="seat-layout"></div>
+        </div>
 
         <div id="organize-result"></div>
     </body>

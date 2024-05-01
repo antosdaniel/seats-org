@@ -1,11 +1,24 @@
 package seat_layouts
 
-import "github.com/antosdaniel/seats-org/pkg/organize"
+import (
+	"errors"
+
+	"github.com/antosdaniel/seats-org/pkg/organize"
+)
 
 const (
 	x = false
 	o = true
 )
+
+func Get(name string) (*organize.Layout, error) {
+	layout, isSet := Presets[name]
+	if !isSet {
+		return nil, errors.New("seat layout not found")
+	}
+
+	return layout, nil
+}
 
 var Presets = map[string]*organize.Layout{
 	"Long": organize.MustImportLayout(10, 5, [][]organize.IsSeat{

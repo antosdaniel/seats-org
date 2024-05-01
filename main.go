@@ -3,11 +3,13 @@ package main
 import (
 	"encoding/csv"
 	"fmt"
+	"mime/multipart"
 	"sort"
+	"strings"
 
+	"github.com/antosdaniel/seats-org/pkg/organize"
 	"github.com/antosdaniel/seats-org/pkg/seat_layouts"
 	"github.com/antosdaniel/seats-org/views/layout"
-
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -39,41 +41,136 @@ func main() {
 
 	e.POST("/organize", func(c echo.Context) error {
 		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTML)
-
 		file, err := c.FormFile("passengers")
 		if err != nil {
 			return fmt.Errorf("file not provided: %w", err)
 		}
 
-		src, err := file.Open()
+		l, err := seat_layouts.Get(c.FormValue("layout"))
 		if err != nil {
-			return fmt.Errorf("could not open file: %w", err)
-		}
-		defer src.Close()
-
-		records, err := csv.NewReader(src).ReadAll()
-		if err != nil {
-			return fmt.Errorf("could not read CSV: %w", err)
+			return err
 		}
 
-		_, _ = c.Response().Write([]byte(fmt.Sprintf("%v", records)))
-		return nil
+		passengers, err := readListOfPassengers(file)
+		if err != nil {
+			return fmt.Errorf("could not read list of passengers: %w", err)
+		}
+
+		result, err := organize.Organize(l, passengers)
+		if err != nil {
+			return err
+		}
+
+		return layout.OrganizeResult(result).Render(c.Request().Context(), c.Response())
 	})
 
 	e.GET("/preview", func(c echo.Context) error {
 		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTML)
 
 		name := c.QueryParam("layout")
-		s, isSet := seat_layouts.Presets[name]
-		if !isSet {
-			_, _ = c.Response().Write([]byte("seat layout not found"))
+		l, err := seat_layouts.Get(name)
+		if err != nil {
+			_, _ = c.Response().Write([]byte(err.Error()))
 			return nil
 		}
 
-		selected := layout.NewSeatLayout(name, s)
+		selected := layout.NewSeatLayout(name, l)
 		_, _ = c.Response().Write([]byte(selected.Visual))
 		return nil
 	})
 
 	e.Logger.Fatal(e.Start(":8000"))
+}
+
+func readListOfPassengers(file *multipart.FileHeader) (organize.Passengers, error) {
+	src, err := file.Open()
+	if err != nil {
+		return nil, fmt.Errorf("could not open file: %w", err)
+	}
+	defer src.Close()
+
+	records, err := csv.NewReader(src).ReadAll()
+	if err != nil {
+		return nil, fmt.Errorf("could not read CSV: %w", err)
+	}
+
+	if len(records) < 1 {
+		return nil, fmt.Errorf("CSV has no rows")
+	}
+
+	idIndex := -1
+	fullNameIndex := -1
+	preferencesIndex := -1
+	for col := range records[0] {
+		header := strings.TrimSpace(strings.ToLower(records[0][col]))
+
+		if header == "id" {
+			idIndex = col
+			continue
+		}
+
+		if strings.Contains(header, "nazwisko") {
+			fullNameIndex = col
+			continue
+		}
+
+		if strings.Contains(header, "preferencje") {
+			preferencesIndex = col
+			continue
+		}
+	}
+
+	if idIndex < 0 {
+		return nil, fmt.Errorf("ID column not found")
+	}
+	if fullNameIndex < 0 {
+		return nil, fmt.Errorf("full name column not found")
+	}
+	if preferencesIndex < 0 {
+		return nil, fmt.Errorf("preferences column not found")
+	}
+
+	result := organize.Passengers{}
+	for row := 1; row < len(records); row++ {
+		id := organize.PassengerId(records[row][idIndex])
+		if id == "" {
+			continue
+		}
+
+		preferences, err := parsePreferences(records[row][preferencesIndex])
+		if err != nil {
+			return nil, err
+		}
+
+		passenger := organize.NewPassenger(id, row, preferences...)
+		result = append(result, passenger)
+	}
+
+	return result, nil
+}
+
+func parsePreferences(in string) (organize.Preferences, error) {
+	if in == "" {
+		return nil, nil
+	}
+
+	result := organize.Preferences{}
+	for _, i := range strings.Split(in, ",") {
+		p := strings.TrimSpace(strings.ToLower(i))
+		switch p {
+		case "okno":
+			result = append(result, organize.WindowSeatPreference)
+		case "przejście":
+			result = append(result, organize.AisleSeatPreference)
+		case "przód":
+			result = append(result, organize.FrontSeatPreference)
+		case "tył":
+			result = append(result, organize.RearSeatPreference)
+		default:
+			return nil, fmt.Errorf("unknown preference %q", p)
+		}
+	}
+
+	// TODO: validate that preferences can be mixex
+	return result, nil
 }
