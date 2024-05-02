@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	"encoding/csv"
 	"fmt"
 	"mime/multipart"
@@ -10,16 +11,21 @@ import (
 	"github.com/antosdaniel/seats-org/pkg/organize"
 	"github.com/antosdaniel/seats-org/pkg/seat_layouts"
 	"github.com/antosdaniel/seats-org/views/layout"
+	"github.com/benbjohnson/hashfs"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
+//go:embed assets
+var embedFS embed.FS
+var assetsFS = hashfs.NewFS(embedFS)
+
 func main() {
 	e := echo.New()
-
+	
 	e.Use(middleware.Logger())
 
-	e.Static("/", "assets")
+	e.StaticFS("/", assetsFS)
 
 	e.GET("/", func(c echo.Context) error {
 		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTML)
@@ -35,7 +41,7 @@ func main() {
 			layouts[i] = layout.NewSeatLayout(name, seat_layouts.Presets[name])
 		}
 
-		return layout.Base(layouts).
+		return layout.Base(assetsFS.HashName, layouts).
 			Render(c.Request().Context(), c.Response())
 	})
 

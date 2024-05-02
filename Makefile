@@ -7,7 +7,7 @@ dev: install
 	$(MAKE) -j generate-watch run-watch
 
 run-watch:
-	$(GOW) -g=make run
+	$(GOW) -e go,mod,css,svg,webp -g=make run
 
 run:
 	go run .

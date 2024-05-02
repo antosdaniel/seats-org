@@ -38,7 +38,7 @@ body {
 }
 
 .seat-grid .seat {
-    background: url("/img/seat.svg") no-repeat center;
+    background: url("/assets/img/seat.svg") no-repeat center;
 }
 
 .seat-grid .seat.taken {
