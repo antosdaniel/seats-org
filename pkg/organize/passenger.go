@@ -8,6 +8,8 @@ type Passenger struct {
 
 	travelsWith []PassengerId
 	preferences Preferences
+
+	Details PassengerDetails
 }
 
 func (ps Passengers) WithPreference(preference Preference) Passengers {
@@ -50,4 +52,8 @@ func (p Passenger) TravelsWith() []PassengerId {
 
 func (p Passenger) Preferences() Preferences {
 	return p.preferences
+}
+
+type PassengerDetails struct {
+	FullName string
 }

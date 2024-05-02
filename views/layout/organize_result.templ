@@ -1,24 +1,38 @@
 package layout
 
 import (
-    "fmt"
-
 	"github.com/antosdaniel/seats-org/pkg/organize"
 )
 
 templ OrganizeResult(result organize.Organized) {
-    <table>
-      <tr>
-        <th>ID</th>
-        <th>Full name</th>
-        <th>Seat (Row-Col)</th>
-      </tr>
-      for _, i := range result.SeatedPassengers.All() {
+    <div id="organized-result">
+        <table>
           <tr>
-            <td>{ string(i.Passenger().Id()) }</td>
-            <td>TODO</td>
-            <td>{ fmt.Sprintf("%2d", i.Row()) }-{ fmt.Sprintf("%2d", i.Col()) }</td>
+            <th>ID</th>
+            <th>Full name</th>
+            <th>Seat (Row-Col)</th>
+            <th>Preferences</th>
           </tr>
-      }
-    </table>
+          for _, i := range OrganizedPassengerList(result) {
+              <tr class={ i.SeatID }
+                  seat-id={ i.SeatID }
+                  hx-on:mouseover="highlightSeat(this)"
+                  hx-on:mouseout="unhighlightSeat(this)" >
+                <td>{ i.ID }</td>
+                <td>{ i.FullName }</td>
+                <td>{ i.Seat }</td>
+                <td>{ i.Preferences }</td>
+              </tr>
+          }
+        </table>
+        <table id="organized-seats-grid">
+            for row := range result.Layout.Rows() {
+                <tr>
+                for col := range result.Layout.Cols() {
+                    <td class={ cellAttrs(result.Layout, row, col) }></td>
+                }
+                </tr>
+            }
+        </table>
+    </div>
 }

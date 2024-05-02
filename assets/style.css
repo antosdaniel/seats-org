@@ -17,3 +17,33 @@ body {
 .form-line {
     margin: 10px 0;
 }
+
+#organized-result {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#organized-seats-grid {
+    align-self: flex-start;
+}
+
+#organized-seats-grid td {
+    width: 20px;
+    min-width: 20px;
+    max-width: 20px;
+    height: 20px;
+    min-height: 20px;
+    max-height: 20px;
+    border: black solid 2px;
+
+    background: white;
+}
+
+#organized-seats-grid td.seat {
+    background: gray;
+}
+
+.highlight-seat {
+    border: red solid 2px !important;
+}

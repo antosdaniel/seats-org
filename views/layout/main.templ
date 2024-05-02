@@ -45,6 +45,23 @@ templ Base(layouts []SeatLayout) {
         </div>
 
         <div id="organize-result"></div>
+
+        <script type="text/javascript">
+            function highlightSeat(element) {
+                const seatID = element.getAttribute("seat-id")
+                const seats = document.getElementsByClassName(seatID)
+                for (let seat of seats) {
+                    seat.classList.add("highlight-seat")
+                }
+            }
+            function unhighlightSeat(element) {
+                const seatID = element.getAttribute("seat-id")
+                const seats = document.getElementsByClassName(seatID)
+                for (let seat of seats) {
+                    seat.classList.remove("highlight-seat")
+                }
+            }
+        </script>
     </body>
 	</html>
 }

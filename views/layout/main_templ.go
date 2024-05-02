@@ -59,7 +59,7 @@ func Base(layouts []SeatLayout) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</select></div><div class=\"form-line\">List of passengers:\r <input type=\"file\" name=\"passengers\"></div><div class=\"form-line\"><button type=\"submit\">Submit</button></div></form><div>Selected seat layout preview:\r<div id=\"seat-layout\"></div></div></div><div id=\"organize-result\"></div></body></html>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</select></div><div class=\"form-line\">List of passengers:\r <input type=\"file\" name=\"passengers\"></div><div class=\"form-line\"><button type=\"submit\">Submit</button></div></form><div>Selected seat layout preview:\r<div id=\"seat-layout\"></div></div></div><div id=\"organize-result\"></div><script type=\"text/javascript\">\r\n            function highlightSeat(element) {\r\n                const seatID = element.getAttribute(\"seat-id\")\r\n                const seats = document.getElementsByClassName(seatID)\r\n                for (let seat of seats) {\r\n                    seat.classList.add(\"highlight-seat\")\r\n                }\r\n            }\r\n            function unhighlightSeat(element) {\r\n                const seatID = element.getAttribute(\"seat-id\")\r\n                const seats = document.getElementsByClassName(seatID)\r\n                for (let seat of seats) {\r\n                    seat.classList.remove(\"highlight-seat\")\r\n                }\r\n            }\r\n        </script></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

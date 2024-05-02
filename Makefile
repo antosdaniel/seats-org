@@ -23,6 +23,7 @@ generate:
 install:
 	go install github.com/mitranim/gow@latest
 	go install github.com/a-h/templ/cmd/templ@latest
+	go install golang.org/x/tools/gopls@latest
 
 prod:
 	docker build -t 'seats-org' -f ./build/Dockerfile .

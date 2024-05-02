@@ -2,6 +2,7 @@ package organize
 
 import (
 	"fmt"
+	"slices"
 )
 
 type IsSeat bool
@@ -129,4 +130,15 @@ func MustImportLayout(rows, cols int, matrix [][]IsSeat) *Layout {
 
 func OrderOf(layout *Layout, row, col int) int {
 	return (row+1)*layout.cols + col
+}
+
+type Cell interface {
+	Row() int
+	Col() int
+}
+
+func SortByOrderAsc[T Cell](items []T, layout *Layout) {
+	slices.SortFunc(items, func(a, b T) int {
+		return OrderOf(layout, a.Row(), a.Col()) - OrderOf(layout, b.Row(), b.Col())
+	})
 }

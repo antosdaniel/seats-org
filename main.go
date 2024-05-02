@@ -131,18 +131,20 @@ func readListOfPassengers(file *multipart.FileHeader) (organize.Passengers, erro
 	}
 
 	result := organize.Passengers{}
-	for row := 1; row < len(records); row++ {
-		id := organize.PassengerId(records[row][idIndex])
+	for i := 1; i < len(records); i++ {
+		row := records[i]
+		id := organize.PassengerId(row[idIndex])
 		if id == "" {
 			continue
 		}
 
-		preferences, err := parsePreferences(records[row][preferencesIndex])
+		preferences, err := parsePreferences(row[preferencesIndex])
 		if err != nil {
 			return nil, err
 		}
 
-		passenger := organize.NewPassenger(id, row, preferences...)
+		passenger := organize.NewPassenger(id, i, preferences...)
+		passenger.Details.FullName = row[fullNameIndex]
 		result = append(result, passenger)
 	}
 
@@ -171,6 +173,6 @@ func parsePreferences(in string) (organize.Preferences, error) {
 		}
 	}
 
-	// TODO: validate that preferences can be mixex
+	// TODO: validate that preferences can be mixed
 	return result, nil
 }

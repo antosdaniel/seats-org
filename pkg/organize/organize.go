@@ -6,6 +6,7 @@ import (
 )
 
 type Organized struct {
+	Layout                    *Layout
 	SeatedPassengers          *SeatedPassengers
 	EmptySeatsLeft            int
 	PossiblyUnhappyPassengers []any
@@ -82,6 +83,7 @@ func Organize(layout *Layout, passengers Passengers) (Organized, error) {
 	}
 
 	return Organized{
+		Layout:           layout,
 		SeatedPassengers: seated,
 	}, nil
 }
