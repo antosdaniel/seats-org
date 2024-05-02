@@ -24,26 +24,27 @@ body {
     justify-content: space-between;
 }
 
-#organized-seats-grid {
+.seat-grid {
     align-self: flex-start;
+    border: black solid 1px;
 }
 
-#organized-seats-grid td {
+.seat-grid td {
     width: 20px;
-    min-width: 20px;
-    max-width: 20px;
     height: 20px;
-    min-height: 20px;
-    max-height: 20px;
-    border: black solid 2px;
+    border: transparent solid 2px;
 
     background: white;
 }
 
-#organized-seats-grid td.seat {
-    background: gray;
+.seat-grid .seat {
+    background: url("/img/seat.svg") no-repeat center;
 }
 
-.highlight-seat {
-    border: red solid 2px !important;
+.seat-grid .seat.taken {
+    background-color: #dddddd;
+}
+
+.seat-grid .seat.highlight {
+    border: red solid 2px;
 }

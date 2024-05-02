@@ -120,7 +120,7 @@ func OrganizeResult(result organize.Organized) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</table><table id=\"organized-seats-grid\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</table><table class=\"seat-grid\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -130,7 +130,7 @@ func OrganizeResult(result organize.Organized) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			for col := range result.Layout.Cols() {
-				var templ_7745c5c3_Var9 = []any{cellAttrs(result.Layout, row, col)}
+				var templ_7745c5c3_Var9 = []any{cellAttrs(result, row, col)}
 				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var9...)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err

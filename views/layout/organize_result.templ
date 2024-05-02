@@ -25,11 +25,11 @@ templ OrganizeResult(result organize.Organized) {
               </tr>
           }
         </table>
-        <table id="organized-seats-grid">
+        <table class="seat-grid">
             for row := range result.Layout.Rows() {
                 <tr>
                 for col := range result.Layout.Cols() {
-                    <td class={ cellAttrs(result.Layout, row, col) }></td>
+                    <td class={ cellAttrs(result, row, col) }></td>
                 }
                 </tr>
             }

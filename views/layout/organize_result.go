@@ -62,10 +62,15 @@ func printPreference(preference organize.Preference) string {
 	}
 }
 
-func cellAttrs(layout *organize.Layout, row, col int) string {
+func cellAttrs(organized organize.Organized, row, col int) string {
 	result := seatID(row, col)
-	if layout.IsSeat(row, col) {
+
+	if organized.Layout.IsSeat(row, col) {
 		result += " seat"
+	}
+
+	if organized.SeatedPassengers.IsTaken(row, col) {
+		result += " taken"
 	}
 	return result
 }
