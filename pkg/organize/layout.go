@@ -67,6 +67,22 @@ func (l *Layout) SeatNumber(row, col int) int {
 	return -1
 }
 
+func (l *Layout) SeatNumberWithLetter(row, col int) string {
+	if !l.IsSeat(row, col) {
+		return ""
+	}
+
+	return fmt.Sprintf("%d%s", row+1, ColumnToLetter(col))
+}
+
+func ColumnToLetter(col int) string {
+	return string(rune('A' + col))
+}
+
+func RowNumber(row int) int {
+	return row + 1
+}
+
 func (l *Layout) isOutsideOfBoundaries(row, col int) bool {
 	if row >= l.rows {
 		// Outside of matrix

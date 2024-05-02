@@ -1,6 +1,8 @@
 package layout
 
 import (
+    "fmt"
+
 	"github.com/antosdaniel/seats-org/pkg/organize"
 )
 
@@ -11,6 +13,7 @@ templ OrganizeResult(result organize.Organized) {
             <th>ID</th>
             <th>Imie i nazwisko</th>
             <th>Miejsce</th>
+            <th>Miejsce z literą</th>
             <th>Preferencje</th>
           </tr>
           for _, i := range OrganizedPassengerList(result) {
@@ -21,16 +24,24 @@ templ OrganizeResult(result organize.Organized) {
                 <td>{ i.ID }</td>
                 <td>{ i.FullName }</td>
                 <td>{ i.SeatNumber }</td>
+                <td>{ i.SeatNumberWithLetter }</td>
                 <td>{ i.Preferences }</td>
               </tr>
           }
         </table>
         <table class="seat-grid">
+            <tr>
+                <td></td>
+                for col := range result.Layout.Cols() {
+                    <td>{ organize.ColumnToLetter(col) }</td>
+                }
+            </tr>
             for row := range result.Layout.Rows() {
                 <tr>
-                for col := range result.Layout.Cols() {
-                    <td class={ cellAttrs(result, row, col) }></td>
-                }
+                    <td>{ fmt.Sprintf("%d", organize.RowNumber(row)) }</td>
+                    for col := range result.Layout.Cols() {
+                        <td class={ cellAttrs(result, row, col) }></td>
+                    }
                 </tr>
             }
         </table>

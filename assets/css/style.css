@@ -32,9 +32,10 @@ body {
 .seat-grid td {
     width: 20px;
     height: 20px;
+    background: white;
     border: transparent solid 2px;
 
-    background: white;
+    text-align: center;
 }
 
 .seat-grid .seat {

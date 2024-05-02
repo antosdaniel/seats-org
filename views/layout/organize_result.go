@@ -8,11 +8,12 @@ import (
 )
 
 type OrganizedPassenger struct {
-	ID          string
-	FullName    string
-	SeatID      string
-	SeatNumber  string
-	Preferences string
+	ID                   string
+	FullName             string
+	SeatID               string
+	SeatNumber           string
+	SeatNumberWithLetter string
+	Preferences          string
 }
 
 func OrganizedPassengerList(organized organize.Organized) []OrganizedPassenger {
@@ -23,11 +24,12 @@ func OrganizedPassengerList(organized organize.Organized) []OrganizedPassenger {
 	result := []OrganizedPassenger{}
 	for _, i := range sorted {
 		p := OrganizedPassenger{
-			ID:          string(i.Passenger().Id()),
-			FullName:    i.Passenger().Details.FullName,
-			SeatID:      seatID(i.Row(), i.Col()),
-			SeatNumber:  fmt.Sprintf("%d", organized.Layout.SeatNumber(i.Row(), i.Col())),
-			Preferences: printPreferences(i.Passenger().Preferences()),
+			ID:                   string(i.Passenger().Id()),
+			FullName:             i.Passenger().Details.FullName,
+			SeatID:               seatID(i.Row(), i.Col()),
+			SeatNumber:           fmt.Sprintf("%d", organized.Layout.SeatNumber(i.Row(), i.Col())),
+			SeatNumberWithLetter: organized.Layout.SeatNumberWithLetter(i.Row(), i.Col()),
+			Preferences:          printPreferences(i.Passenger().Preferences()),
 		}
 		result = append(result, p)
 	}
