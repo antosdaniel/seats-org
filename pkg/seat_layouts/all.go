@@ -21,6 +21,20 @@ func Get(name string) (*organize.Layout, error) {
 }
 
 var Presets = map[string]*organize.Layout{
+	"44+2 (A17)": organize.MustImportLayout([][]organize.IsSeat{
+		{o, o, x, o, o},
+		{o, o, x, o, o},
+		{o, o, x, o, o},
+		{o, o, x, o, o},
+		{o, o, x, x, x},
+		{o, o, x, x, x},
+		{o, o, x, o, o},
+		{o, o, x, o, o},
+		{o, o, x, o, o},
+		{o, o, x, o, o},
+		{o, o, x, o, o},
+		{o, o, x, o, o},
+	}),
 	"49+2 (A21, A23, A27, A38, A47)": organize.MustImportLayout([][]organize.IsSeat{
 		{o, o, x, o, o},
 		{o, o, x, o, o},
@@ -28,6 +42,21 @@ var Presets = map[string]*organize.Layout{
 		{o, o, x, o, o},
 		{o, o, x, o, o},
 		{o, o, x, o, o},
+		{o, o, x, x, x},
+		{o, o, x, x, x},
+		{o, o, x, o, o},
+		{o, o, x, o, o},
+		{o, o, x, o, o},
+		{o, o, x, o, o},
+		{o, o, o, o, o},
+	}),
+	"49+2 (A45, A46, A53) \n": organize.MustImportLayout([][]organize.IsSeat{
+		{o, o, x, o, o},
+		{o, o, x, o, o},
+		{o, o, x, o, o},
+		{o, o, x, o, o},
+		{o, o, x, o, o},
+		{o, o, x, x, x},
 		{o, o, x, x, x},
 		{o, o, x, x, x},
 		{o, o, x, o, o},
