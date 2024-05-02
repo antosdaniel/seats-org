@@ -1,6 +1,7 @@
 package organize
 
 import (
+	"errors"
 	"fmt"
 	"slices"
 )
@@ -82,9 +83,16 @@ func NewLayout(rows, cols int) *Layout {
 	}
 }
 
-func ImportLayout(rows, cols int, matrix [][]IsSeat) (*Layout, error) {
-	if len(matrix) != rows {
-		return nil, fmt.Errorf("provided (%d) different amount of rows than promised (%d)", len(matrix), rows)
+var EmptyLayoutErr = errors.New("layout needs rows and cols")
+
+func ImportLayout(matrix [][]IsSeat) (*Layout, error) {
+	rows := len(matrix)
+	if rows == 0 {
+		return nil, EmptyLayoutErr
+	}
+	cols := len(matrix[0])
+	if cols == 0 {
+		return nil, EmptyLayoutErr
 	}
 
 	layout := NewLayout(rows, cols)
@@ -120,8 +128,8 @@ func ImportLayout(rows, cols int, matrix [][]IsSeat) (*Layout, error) {
 	return layout, nil
 }
 
-func MustImportLayout(rows, cols int, matrix [][]IsSeat) *Layout {
-	layout, err := ImportLayout(rows, cols, matrix)
+func MustImportLayout(matrix [][]IsSeat) *Layout {
+	layout, err := ImportLayout(matrix)
 	if err != nil {
 		panic(err)
 	}

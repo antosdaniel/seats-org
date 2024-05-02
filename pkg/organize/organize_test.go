@@ -14,7 +14,7 @@ const (
 	o = true
 )
 
-var exampleLayout = organize.MustImportLayout(5, 5, [][]organize.IsSeat{
+var exampleLayout = organize.MustImportLayout([][]organize.IsSeat{
 	{o, o, x, o, o},
 	{o, o, x, o, o},
 	{o, o, x, x, x},

@@ -16,8 +16,6 @@ func TestImportLayout(t *testing.T) {
 	testCases := []struct {
 		name string
 
-		rows   int
-		cols   int
 		matrix [][]IsSeat
 
 		want    *Layout
@@ -26,16 +24,11 @@ func TestImportLayout(t *testing.T) {
 		{
 			name: "number of declared rows does not match",
 
-			rows: 3,
-			cols: 3,
-
-			wantErr: errors.New("provided (0) different amount of rows than promised (3)"),
+			wantErr: EmptyLayoutErr,
 		},
 		{
 			name: "number of declared cols does not match",
 
-			rows: 3,
-			cols: 3,
 			matrix: [][]IsSeat{
 				{o, o, o},
 				{o, o},
@@ -47,8 +40,6 @@ func TestImportLayout(t *testing.T) {
 		{
 			name: "sets seats correctly",
 
-			rows: 4,
-			cols: 4,
 			matrix: [][]IsSeat{
 				{o, o, o, o},
 				{o, x, o, o},
@@ -90,7 +81,7 @@ func TestImportLayout(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			got, err := ImportLayout(tc.rows, tc.cols, tc.matrix)
+			got, err := ImportLayout(tc.matrix)
 
 			if tc.wantErr != nil {
 				assert.Equal(t, tc.wantErr, err)
