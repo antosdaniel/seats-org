@@ -9,9 +9,9 @@ templ OrganizeResult(result organize.Organized) {
         <table>
           <tr>
             <th>ID</th>
-            <th>Full name</th>
-            <th>Seat (Row-Col)</th>
-            <th>Preferences</th>
+            <th>Imie i nazwisko</th>
+            <th>Miejsce</th>
+            <th>Preferencje</th>
           </tr>
           for _, i := range OrganizedPassengerList(result) {
               <tr class={ i.SeatID }
@@ -20,7 +20,7 @@ templ OrganizeResult(result organize.Organized) {
                   hx-on:mouseout="unhighlightSeat(this)" >
                 <td>{ i.ID }</td>
                 <td>{ i.FullName }</td>
-                <td>{ i.Seat }</td>
+                <td>{ i.SeatNumber }</td>
                 <td>{ i.Preferences }</td>
               </tr>
           }

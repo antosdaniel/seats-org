@@ -11,7 +11,7 @@ type OrganizedPassenger struct {
 	ID          string
 	FullName    string
 	SeatID      string
-	Seat        string
+	SeatNumber  string
 	Preferences string
 }
 
@@ -26,7 +26,7 @@ func OrganizedPassengerList(organized organize.Organized) []OrganizedPassenger {
 			ID:          string(i.Passenger().Id()),
 			FullName:    i.Passenger().Details.FullName,
 			SeatID:      seatID(i.Row(), i.Col()),
-			Seat:        fmt.Sprintf("%2d - %2d", i.Row(), i.Col()),
+			SeatNumber:  fmt.Sprintf("%d", organized.Layout.SeatNumber(i.Row(), i.Col())),
 			Preferences: printPreferences(i.Passenger().Preferences()),
 		}
 		result = append(result, p)

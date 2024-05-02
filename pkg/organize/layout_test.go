@@ -92,3 +92,17 @@ func TestImportLayout(t *testing.T) {
 		})
 	}
 }
+
+func TestLayout_SeatNumber(t *testing.T) {
+	layout := MustImportLayout([][]IsSeat{
+		{o, o, o, o},
+		{o, x, o, o},
+		{x, x, o, o},
+		{o, x, o, o},
+	})
+
+	assert.Equal(t, 1, layout.SeatNumber(0, 0))
+	assert.Equal(t, 6, layout.SeatNumber(1, 2))
+	assert.Equal(t, 8, layout.SeatNumber(2, 2))
+	assert.Equal(t, -1, layout.SeatNumber(99, 99))
+}

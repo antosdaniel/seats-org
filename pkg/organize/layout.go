@@ -45,6 +45,28 @@ func (l *Layout) LastRow() int {
 	return l.rows - 1
 }
 
+func (l *Layout) SeatNumber(row, col int) int {
+	if !l.IsSeat(row, col) {
+		return -1
+	}
+
+	number := 0
+	for r := range l.Rows() {
+		for c := range l.Cols() {
+			if !l.IsSeat(r, c) {
+				continue
+			}
+
+			number++
+
+			if r == row && c == col {
+				return number
+			}
+		}
+	}
+	return -1
+}
+
 func (l *Layout) isOutsideOfBoundaries(row, col int) bool {
 	if row >= l.rows {
 		// Outside of matrix

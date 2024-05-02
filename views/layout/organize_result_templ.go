@@ -27,7 +27,7 @@ func OrganizeResult(result organize.Organized) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"organized-result\"><table><tr><th>ID</th><th>Full name</th><th>Seat (Row-Col)</th><th>Preferences</th></tr>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"organized-result\"><table><tr><th>ID</th><th>Imie i nazwisko</th><th>Miejsce</th><th>Preferencje</th></tr>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -94,9 +94,9 @@ func OrganizeResult(result organize.Organized) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var7 string
-			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(i.Seat)
+			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(i.SeatNumber)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layout/organize_result.templ`, Line: 23, Col: 28}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layout/organize_result.templ`, Line: 23, Col: 34}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
