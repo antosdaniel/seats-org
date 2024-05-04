@@ -20,7 +20,7 @@ templ Base(hashName func(string)string, layouts []SeatLayout) {
                   hx-target="#organize-result"
             >
                 <div class="form-line">
-                    Choose seat layout:
+                    Rozkład siedzeń
                     <select name="layout" hx-get="/preview" hx-target="#seat-layout" hx-trigger="load, change">
                         <option value="" selected disabled hidden></option>
                         for _, l := range layouts {
@@ -30,16 +30,16 @@ templ Base(hashName func(string)string, layouts []SeatLayout) {
                 </div>
 
                 <div class="form-line">
-                    List of passengers:
+                    Lista pasażerów
                     <input type="file" name="passengers" />
                 </div>
 
                 <div class="form-line">
-                    <button type="submit">Submit</button>
+                    <button type="submit">Organizuj!</button>
                 </div>
             </form>
             <div>
-                Selected seat layout preview:
+                Orientacyjny rozkład siedzeń:
                 <div id="seat-layout"></div>
             </div>
         </div>

@@ -50,7 +50,7 @@ var Presets = map[string]*organize.Layout{
 		{o, o, x, o, o},
 		{o, o, o, o, o},
 	}),
-	"49+2 (A45, A46, A53) \n": organize.MustImportLayout([][]organize.IsSeat{
+	"49+2 (A45, A46, A53)": organize.MustImportLayout([][]organize.IsSeat{
 		{o, o, x, o, o},
 		{o, o, x, o, o},
 		{o, o, x, o, o},
